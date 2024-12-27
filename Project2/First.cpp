@@ -1,23 +1,46 @@
 ﻿#include "Animal.h"
-#include "Cat.h"
-#include "Dog.h"
-#include "Cow.h"
+#include "Zoo.h"
+#include <stdlib.h>
+#include <ctime>
+#include <iostream>
+
+using namespace std;
+
+Animal* createRandomAnimal();
 
 void main()
 {
-	//정적배열 할당
-	Animal* asdf[] = {new Dog(), new Cat(), new Cow()};
+	srand((unsigned int)time(NULL));
 
-	//각 객체들의 makeSound() 호출 : 기본클래스인 Animal의 순수가상함수라 없을수는 없다
-	for (int i = 0; i < 3; i++)
+	Zoo* myZoo = new Zoo();
+
+	//넣을 마릿수 입력.최대값 이상은 최대치 값으로 변경
+	int cnt = 0;
+	cout << "동물원에 넣을 동물수 (최대 10마리, 랜덤입양) :";
+	cin >> cnt;
+	cnt = cnt > 10 ? 10 : cnt;
+	for (int i = 0; i < cnt; i++)
 	{
-		if(asdf[i] != nullptr)
-			asdf[i]->makeSound();
+		myZoo->addAnimal(createRandomAnimal());
 	}
 
-	//동적 할당한 원소들 제거
-	for (int i = 0; i < 3; i++)
+	myZoo->performActions();
+
+	delete myZoo;
+}
+
+Animal* createRandomAnimal()
+{
+
+	switch (rand() % 3)
 	{
-		delete asdf[i];
+	case 0:
+		return new Dog();
+	case 1:
+		return new Cat();
+	case 2:
+		return new Cow();
 	}
+
+	return nullptr;
 }
